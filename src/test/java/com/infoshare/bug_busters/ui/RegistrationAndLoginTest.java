@@ -5,6 +5,7 @@ import com.infoshare.bug_busters.random.RandomDataGenerator;
 import com.infoshare.bug_busters.registration.UserDataGenerator;
 import com.infoshare.bug_busters.utils.WebDriverCreators;
 import com.infoshare.bug_busters.utils.WebDriverProvider;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -29,6 +30,11 @@ public class RegistrationAndLoginTest {
         homePage = new HomePage(driver);
     }
 
+    @After
+    public void tearDown() {
+        driver.close();
+    }
+
     @Test
     public void registrationWithUserDataGeneratorMethodTest() throws IOException {
         driver.get("http://localhost:4180/");
@@ -43,6 +49,13 @@ public class RegistrationAndLoginTest {
         driver.get("http://localhost:4180/");
         homePage.regiterUserTwiceWithTheSameData();
         assertThat(homePage.alertRegistration().contains("There was a problem with your registration: Internal Server Error")).as("Alert is not show after creating two indentical accounts");
+    }
+
+    @Test
+    public void loginAfterRegistration() throws IOException {
+        driver.get("http://localhost:4180/");
+        homePage.loginUserAfterRegistration();
+        assertThat(homePage.getTextFromLogoutToConfirmLoginOrRegistration().contains("Logout")).as("User is not Logged");
     }
 
 }

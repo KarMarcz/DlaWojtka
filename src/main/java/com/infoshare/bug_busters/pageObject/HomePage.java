@@ -41,6 +41,15 @@ public class HomePage {
     @FindBy(xpath = "//li[@id='login']//a[@href='#'][contains(text(),'Login')]")
     private WebElement loginButton;
 
+    @FindBy(xpath = "//input[@id='username-modal']")
+    private WebElement loginUserNameFieldInLoginWindow;
+
+    @FindBy(xpath = "//input[@id='password-modal']")
+    private WebElement passwordFieldInLoginWindow;
+
+    @FindBy(xpath = "//div[@id='login-modal']//button[@class='btn btn-primary']")
+    private WebElement loginButtonInLoginWindow;
+
     @FindBy(xpath = "//div[@class='alert alert-danger']")
     private WebElement alertRegistration;
 
@@ -76,7 +85,7 @@ public class HomePage {
 
     public void regiterUserTwiceWithTheSameData() throws IOException {
 
-        String userName = userDataGenerator.prepareUserData().getUserName()+"1111";
+        String userName = userDataGenerator.prepareUserData().getUserName();
         String firstName = userDataGenerator.prepareUserData().getFirstName();
         String lastName = userDataGenerator.prepareUserData().getLastName();
         String email = userDataGenerator.prepareUserData().getEmail();
@@ -102,6 +111,35 @@ public class HomePage {
         emailFieldInRegistration.sendKeys(email);
         passwordFieldInRegistration.sendKeys(password);
         registerinPopUpWindowButton.click();
+
+    }
+
+    public void loginUserAfterRegistration() throws IOException {
+
+        String userName = userDataGenerator.prepareUserData().getUserName();
+        String firstName = userDataGenerator.prepareUserData().getFirstName();
+        String lastName = userDataGenerator.prepareUserData().getLastName();
+        String email = userDataGenerator.prepareUserData().getEmail();
+        String password = userDataGenerator.prepareUserData().getPassword();
+
+        registerButton.click();
+        waits.waitForElementToBeVisible(userNameFieldInRegistration);
+        userNameFieldInRegistration.sendKeys(userName);
+        firstNameFieldInRegistration.sendKeys(firstName);
+        lastNameFieldInRegistration.sendKeys(lastName);
+        emailFieldInRegistration.sendKeys(email);
+        passwordFieldInRegistration.sendKeys(password);
+        registerinPopUpWindowButton.click();
+        waits.waitForElementToBeVisible(logoutButton);
+        logoutButton.click();
+
+        waits.waitForElementToBeVisible(loginButton);
+        loginButton.click();
+        waits.waitForElementToBeVisible(loginUserNameFieldInLoginWindow);
+        loginUserNameFieldInLoginWindow.sendKeys(userName);
+        passwordFieldInLoginWindow.sendKeys(password);
+        loginButtonInLoginWindow.click();
+        waits.waitForElementToBeVisible(logoutButton);
 
     }
 
