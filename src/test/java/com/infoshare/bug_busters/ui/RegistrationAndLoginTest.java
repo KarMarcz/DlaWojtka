@@ -17,11 +17,9 @@ public class RegistrationAndLoginTest {
 
     private WebDriver driver;
 
-    private RandomDataGenerator dataGenerator;
-
     private HomePage homePage;
 
-    UserDataGenerator userDataGenerator = new UserDataGenerator(dataGenerator);
+    private UserDataGenerator userDataGenerator = new UserDataGenerator(new RandomDataGenerator());
 
     @Before
     public void setUp() {
@@ -32,19 +30,19 @@ public class RegistrationAndLoginTest {
     }
 
     @Test
-    public void klikanie() {
-        driver.get("http://localhost:4180/");
-        homePage.klikanie();
-    }
-
-    @Test
     public void registrationWithUserDataGeneratorMethodTest() throws IOException {
         driver.get("http://localhost:4180/");
 
-        homePage.registerUserWithDataGeneratorMethod("Karol2", "Karol", "Karol", "costam@gmail@com", "abcd1234");
+        homePage.registerUserWithDataGeneratorMethod(userDataGenerator.prepareUserData().getUserName(), userDataGenerator.prepareUserData().getFirstName(), userDataGenerator.prepareUserData().getLastName(), userDataGenerator.prepareUserData().getEmail(), userDataGenerator.prepareUserData().getPassword());
 
         assertThat(homePage.getTextFromLogoutToConfirmLoginOrRegistration().contains("Logout")).as("User is not Registered");
     }
 
+    @Test
+    public void registrationTwiceWithTheSameData() throws IOException {
+        driver.get("http://localhost:4180/");
+        homePage.regiterUserTwiceWithTheSameData();
+        assertThat(homePage.alertRegistration().contains("There was a problem with your registration: Internal Server Error")).as("Alert is not show after creating two indentical accounts");
+    }
+
 }
-//userDataGenerator.prepareUserData().getUserName(), userDataGenerator.prepareUserData().getFirstName(), userDataGenerator.prepareUserData().getLastName(), userDataGenerator.prepareUserData().getEmail(), userDataGenerator.prepareUserData().getPassword()
