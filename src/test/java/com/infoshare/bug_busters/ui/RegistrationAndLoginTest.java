@@ -1,8 +1,6 @@
 package com.infoshare.bug_busters.ui;
 
 import com.infoshare.bug_busters.pageObject.HomePage;
-import com.infoshare.bug_busters.random.RandomDataGenerator;
-import com.infoshare.bug_busters.registration.UserDataGenerator;
 import com.infoshare.bug_busters.utils.WebDriverCreators;
 import com.infoshare.bug_busters.utils.WebDriverProvider;
 import org.junit.After;
@@ -20,8 +18,6 @@ public class RegistrationAndLoginTest {
 
     private HomePage homePage;
 
-    private UserDataGenerator userDataGenerator = new UserDataGenerator(new RandomDataGenerator());
-
     @Before
     public void setUp() {
         driver = new WebDriverProvider(WebDriverCreators.CHROME).getDriver();
@@ -38,9 +34,7 @@ public class RegistrationAndLoginTest {
     @Test
     public void registrationWithUserDataGeneratorMethodTest() throws IOException {
         driver.get("http://localhost:4180/");
-
         homePage.registerUserWithDataGeneratorMethod();
-
         assertThat(homePage.getTextFromLogoutToConfirmLoginOrRegistration().contains("Logout")).as("User is not Registered");
     }
 

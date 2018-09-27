@@ -1,5 +1,7 @@
 package com.infoshare.bug_busters.registration;
 
+import java.util.UUID;
+
 public class UserData {
 
     private String userName;
@@ -9,7 +11,7 @@ public class UserData {
     private String password;
 
     public UserData(String userName, String firstName, String lastName, String email, String password) {
-        this.userName = userName;
+        this.userName = userName + UUID.randomUUID().toString();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
