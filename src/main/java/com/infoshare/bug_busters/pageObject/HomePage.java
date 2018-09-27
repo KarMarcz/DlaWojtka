@@ -4,14 +4,12 @@ import com.infoshare.bug_busters.random.RandomDataGenerator;
 import com.infoshare.bug_busters.registration.UserData;
 import com.infoshare.bug_busters.registration.UserDataGenerator;
 import com.infoshare.bug_busters.utils.Waits;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.io.IOException;
-import java.util.List;
 
 public class HomePage {
 
@@ -64,35 +62,6 @@ public class HomePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void registrationSteps(String userName, String firstName, String lastName, String email, String password) {
-        registerButton.click();
-        waits.waitForElementToBeVisible(userNameFieldInRegistration);
-        userNameFieldInRegistration.sendKeys(userName);
-        firstNameFieldInRegistration.sendKeys(firstName);
-        lastNameFieldInRegistration.sendKeys(lastName);
-        emailFieldInRegistration.sendKeys(email);
-        passwordFieldInRegistration.sendKeys(password);
-        registerinPopUpWindowButton.click();
-
-    }
-
-    public UserData sameDataForRegisterAndLogin() throws IOException {
-
-        String userName = userDataGenerator.prepareUserData().getUserName();
-        String firstName = userDataGenerator.prepareUserData().getFirstName();
-        String lastName = userDataGenerator.prepareUserData().getLastName();
-        String email = userDataGenerator.prepareUserData().getEmail();
-        String password = userDataGenerator.prepareUserData().getPassword();
-
-        return new UserData(userName,firstName,lastName,email,password);
-
-    }
-
-    public void registerUserWithDataGeneratorMethod(String userName, String firstName, String lastName, String email, String password) {
-        registrationSteps(userName, firstName, lastName, email, password);
-        waits.waitForElementToBeVisible(logoutButton);
-    }
-
     public String getTextFromLogoutToConfirmLoginOrRegistration() {
         return logoutButton.getText();
     }
@@ -101,24 +70,62 @@ public class HomePage {
         return alertRegistration.getText();
     }
 
-    public void regiterUserTwiceWithTheSameData() throws IOException {
-        UserData userData = sameDataForRegisterAndLogin();
-        registrationSteps(userData.getUserName(), userData.getFirstName(), userData.getLastName(), userData.getEmail(), userData.getPassword());
+    public void waitsWhenLogout() {
         waits.waitForElementToBeVisible(logoutButton);
         logoutButton.click();
-
         waits.waitForElementToBeVisible(loginButton);
-        registrationSteps(userData.getUserName(), userData.getFirstName(), userData.getLastName(), userData.getEmail(), userData.getPassword());
+    }
+
+    public void registrationSteps(UserData userData) {
+        registerButton.click();
+        waits.waitForElementToBeVisible(userNameFieldInRegistration);
+        userNameFieldInRegistration.sendKeys(userData.getUserName());
+        firstNameFieldInRegistration.sendKeys(userData.getFirstName());
+        lastNameFieldInRegistration.sendKeys(userData.getLastName());
+        emailFieldInRegistration.sendKeys(userData.getEmail());
+        passwordFieldInRegistration.sendKeys(userData.getPassword());
+        registerinPopUpWindowButton.click();
+
+    }
+
+    public void registerUserWithDataGeneratorMethod() throws IOException {
+
+        UserData userData = new UserData(userDataGenerator.prepareUserData().getUserName(),
+                userDataGenerator.prepareUserData().getFirstName(),
+                userDataGenerator.prepareUserData().getLastName(),
+                userDataGenerator.prepareUserData().getEmail(),
+                userDataGenerator.prepareUserData().getPassword());
+
+        registrationSteps(userData);
+        waits.waitForElementToBeVisible(logoutButton);
+
+    }
+
+    public void regiterUserTwiceWithTheSameData() throws IOException {
+
+        UserData userData = new UserData(userDataGenerator.prepareUserData().getUserName(),
+                userDataGenerator.prepareUserData().getFirstName(),
+                userDataGenerator.prepareUserData().getLastName(),
+                userDataGenerator.prepareUserData().getEmail(),
+                userDataGenerator.prepareUserData().getPassword());
+        registrationSteps(userData);
+        waitsWhenLogout();
+        registrationSteps(userData);
 
     }
 
     public void loginUserAfterRegistration() throws IOException {
-        UserData userData = sameDataForRegisterAndLogin();
-        registrationSteps(userData.getUserName(), userData.getFirstName(), userData.getLastName(), userData.getEmail(), userData.getPassword());
-        waits.waitForElementToBeVisible(logoutButton);
-        logoutButton.click();
 
-        waits.waitForElementToBeVisible(loginButton);
+        UserData userData = new UserData(userDataGenerator.prepareUserData().getUserName(),
+                userDataGenerator.prepareUserData().getFirstName(),
+                userDataGenerator.prepareUserData().getLastName(),
+                userDataGenerator.prepareUserData().getEmail(),
+                userDataGenerator.prepareUserData().getPassword());
+
+        registrationSteps(userData);
+
+        waitsWhenLogout();
+
         loginButton.click();
         waits.waitForElementToBeVisible(loginUserNameFieldInLoginWindow);
         loginUserNameFieldInLoginWindow.sendKeys(userData.getUserName());

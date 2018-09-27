@@ -39,7 +39,7 @@ public class RegistrationAndLoginTest {
     public void registrationWithUserDataGeneratorMethodTest() throws IOException {
         driver.get("http://localhost:4180/");
 
-        homePage.registerUserWithDataGeneratorMethod(userDataGenerator.prepareUserData().getUserName(), userDataGenerator.prepareUserData().getFirstName(), userDataGenerator.prepareUserData().getLastName(), userDataGenerator.prepareUserData().getEmail(), userDataGenerator.prepareUserData().getPassword());
+        homePage.registerUserWithDataGeneratorMethod();
 
         assertThat(homePage.getTextFromLogoutToConfirmLoginOrRegistration().contains("Logout")).as("User is not Registered");
     }
