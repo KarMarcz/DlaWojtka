@@ -25,7 +25,7 @@ public class UserDataGeneratorTest {  // napisac testy jednostkowe czyli do kazd
 
         UserData result = underTest.prepareUserData();
 
-        Assertions.assertThat(result.getUserName()) //asercja assertJa
+        Assertions.assertThat(result.getUserName().substring(0,9)) //asercja assertJa
                 .isEqualTo("login_ola");
     }
 }
